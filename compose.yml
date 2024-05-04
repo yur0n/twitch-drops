@@ -3,7 +3,7 @@ services:
 
   frontend:
     container_name: frontend
-    image: frontend
+    image: yuron/twitch-frontend
     env_file:
       - .env
     build:
@@ -19,7 +19,7 @@ services:
 
   backend:
     container_name: backend
-    image: backend
+    image: yur0n/twitch-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
