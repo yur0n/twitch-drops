@@ -1,0 +1,49 @@
+
+services:
+
+  frontend:
+    container_name: frontend
+    image: frontend
+    env_file:
+      - .env
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        API_URL: ${API_URL}
+    restart: always
+    ports:
+      - 4000:4000
+    depends_on:
+      - backend
+
+  backend:
+    container_name: backend
+    image: backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 5000:5000
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - DB_URL=mongodb://mongo:27017/main
+    depends_on:
+      - mongo
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    environment:
+      - MONGO_INITDB_DATABASE=main
+    volumes:
+      - pgdata:/data/db
+
+volumes:
+  pgdata:
+    driver: local
