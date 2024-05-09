@@ -1,15 +1,12 @@
 // @ts-nocheck
 
 export class Twitch {
-	private clientId: string;
-	private userAgent: string;
 
 	constructor(
 		private token: string,
-	) {
-		this.clientId = 'kimne78kx3ncx6brgo4mv6wki5h1ko';
-		this.userAgent = '';
-	}
+		private clientId: string = 'kimne78kx3ncx6brgo4mv6wki5h1ko',
+		private userAgent: string = ''
+	) {}
 
 	private generateGQLQuery(operationName: string, variables: {[key: string]: any}, sha256Hash: string): Query {
 		return {

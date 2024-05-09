@@ -5,7 +5,6 @@ import { Twitch } from '../classes/twitch';
 export async function getBotDrops (req: Request, res: Response) {
 	try {
 		const token = req.query.token;
-		console.log(req.query)
 		if (!token) {
 			return res.send({ ok: false, status: 206 });
 		}

@@ -1,6 +1,25 @@
 
 services:
 
+  miner:
+    container_name: miner
+    image: yur0n/twitch-miner
+    build:
+      context: ./miner
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 5001:5001
+    environment:
+      - WEBHOOK_ENDPOINT=http://backend:5000/webhook
+      - NODE_ENV=production
+      - PORT=5001
+      - TERM=xterm-256color
+    depends_on:
+      - backend
+
   frontend:
     container_name: frontend
     image: yur0n/twitch-frontend
@@ -29,6 +48,7 @@ services:
     env_file:
       - .env
     environment:
+      - MINER_ENDPOINT=http://miner:5001
       - NODE_ENV=production
       - PORT=5000
       - DB_URL=mongodb://mongo:27017/main

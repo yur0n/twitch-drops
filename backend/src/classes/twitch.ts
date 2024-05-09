@@ -1,15 +1,13 @@
 
 // @ts-nocheck
+
 export class Twitch {
-	private clientId: string;
-	private userAgent: string;
 
 	constructor(
 		private token: string,
-	) {
-		this.clientId = 'kimne78kx3ncx6brgo4mv6wki5h1ko';
-		this.userAgent = '';
-	}
+		private clientId: string = 'kimne78kx3ncx6brgo4mv6wki5h1ko',
+		private userAgent: string = ''
+	) {}
 
 	private generateGQLQuery(operationName: string, variables: {[key: string]: any}, sha256Hash: string): Query {
 		return {
@@ -24,7 +22,7 @@ export class Twitch {
 		}
 	}
 
-	private async fetchGQL(queries: Query[]): Promise<any[] | null> {
+	private async fetchGQL(queries: Query[]): Promise<{}[]> {
 		return await fetch('https://gql.twitch.tv/gql', {
 			method: 'POST',
 			headers: {
@@ -42,7 +40,7 @@ export class Twitch {
 			}
 			return data.map(d => {
 				if (d.errors) {
-					console.error(d.errors[0]);
+					console.error(d.errors);
 					return [];
 				}
 				return d;
@@ -61,7 +59,7 @@ export class Twitch {
 			"5a4da2ab3d5b47c9f9ce864e727b2cb346af1e3ea8b897fe8f704a97ff017619"
 		);
 		const data = await this.fetchGQL([query]);
-		const campaigns = data ? data[0].data.currentUser.dropCampaigns : null;
+		const campaigns = data[0]?.data.currentUser.dropCampaigns || [];
 		const result = campaigns
 			.filter(campaign => campaign.status === 'ACTIVE')
 			.reduce((groupedCampaigns, campaign) => {
@@ -114,8 +112,8 @@ export class Twitch {
 			"e303f59d4836d19e66cb0f5a1efe15fbe2a1c02d314ad4f09982e825950b293d"
 		);
 		const data = await this.fetchGQL([query]);
-		const streams = data ? data[0].data.game.streams.edges : null;
-		const result: string = streams.map((edge) => edge.node.broadcaster.displayName);
+		const streams = data[0]?.data.game.streams.edges || [];
+		const result: string[] = streams.map((edge) => edge.node.broadcaster.displayName);
 		return result;
 	}
 
@@ -126,7 +124,7 @@ export class Twitch {
 			"b4d44a31239607d86878edb6de93e569339b6723dd585b93a307325205611ee3"
 		);
 		const data = await this.fetchGQL([query]);
-		const campaigns = data?.length ? data[0].data.currentUser.inventory.dropCampaignsInProgress : [];
+		const campaigns = data[0]?.data.currentUser.inventory.dropCampaignsInProgress || [];
 		const result = campaigns.map(campaign => {
 			return {
 				game: campaign.game.name,

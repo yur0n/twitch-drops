@@ -31,8 +31,8 @@ const ListActions = () => (
 );
 
 export const BotList = () => (
-  <InfiniteList pagination={<CustomPagination />} actions={<ListActions />}>
-    <Datagrid rowClick="show" bulkActionButtons={<BotListActionButtons />}>
+  <InfiniteList pagination={<CustomPagination />} actions={<ListActions />} >
+    <Datagrid rowClick="show" bulkActionButtons={<BotListActionButtons />} >
       {/* <TextField source="id" /> */}
       <TextField source="login" />
       <TextField source="password" />
